@@ -28,3 +28,24 @@ dependencies {
     compile 'com.android.support:design:25.1.1'
     testCompile 'junit:junit:4.12'
 }
+
+tasks.withType(Test) {
+    testLogging {
+        beforeTest { testDescriptor ->
+            println("Buddybuild Starting Test: ${testDescriptor.getName()}")
+        }
+
+        afterTest { testDescriptor, result ->
+            def testDuration = String.format("%.3f", (float) (result.getEndTime() - result.getStartTime()) / 1000F)
+            println("Buddybuild Finished Test: ${testDescriptor.getName()} [${testDuration}s] - ${result.getResultType().toString()}")
+        }
+
+        beforeSuite { testDescriptor ->
+            println("Buddybuild Starting Test Suite: ${testDescriptor.getName()}")
+        }
+
+        afterSuite { testDescriptor, result ->
+            println("Buddybuild Finished Test Suite: ${testDescriptor.getName()}")
+        }
+    }
+}
